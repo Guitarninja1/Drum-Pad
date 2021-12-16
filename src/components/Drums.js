@@ -1,77 +1,127 @@
 import _drums from "./_drums.js";
-import Drum from "./drum.js";
-import { useEffect, useState } from "react";
+import { React, useRef, useEffect } from "react";
 
 export default function Drums() {
-  const [drums] = useState(_drums);
   const keys = ["a", "s", "d", "f", "g", "h", "j", "k", "l"];
-  // const [playing, setPlaying] = useState(false);
-  // const [currentDrum, setCurrentDrum] = useState();
-
-  useEffect(() => {
-    const drum1 = document.querySelector("#BOOM");
-    const drum2 = document.querySelector("#CLAP");
-    const drum3 = document.querySelector("#HIHAT");
-    const drum4 = document.querySelector("#KICK");
-    const drum5 = document.querySelector("#OPENHAT");
-    const drum6 = document.querySelector("#RIDE");
-    const drum7 = document.querySelector("#SNARE");
-    const drum8 = document.querySelector("#TINK");
-    const drum9 = document.querySelector("#TOM");
-
-    function handleKeyDown(e) {
-      console.log(e.key);
-      if (e.key === "a") {
-        drum1.currentTime = 0;
-        drum1.play();
+  const aRef = useRef();
+  const sRef = useRef();
+  const dRef = useRef();
+  const fRef = useRef();
+  const gRef = useRef();
+  const hRef = useRef();
+  const jRef = useRef();
+  const kRef = useRef();
+  const lRef = useRef();
+  const drumKeyPair = {
+    a: aRef,
+    s: sRef,
+    d: dRef,
+    f: fRef,
+    g: gRef,
+    h: hRef,
+    j: jRef,
+    k: kRef,
+    l: lRef,
+  };
+  function handleKeyPress(e) {
+    switch (e.key) {
+      case "a": {
+        if (aRef.current) {
+          aRef.current.currentTime = 0;
+          aRef.current.play();
+        }
+        break;
       }
-      if (e.key === "s") {
-        drum2.currentTime = 0;
-        drum2.play();
+      case "s": {
+        if (sRef.current) {
+          sRef.current.currentTime = 0;
+          sRef.current.play();
+        }
+        break;
       }
-      if (e.key === "d") {
-        drum3.currentTime = 0;
-        drum3.play();
+      case "d": {
+        if (dRef.current) {
+          dRef.current.currentTime = 0;
+          dRef.current.play();
+        }
+        break;
       }
-      if (e.key === "f") {
-        drum4.currentTime = 0;
-        drum4.play();
+      case "f": {
+        if (fRef.current) {
+          fRef.current.currentTime = 0;
+          fRef.current.play();
+        }
+        break;
       }
-      if (e.key === "g") {
-        drum5.currentTime = 0;
-        drum5.play();
+      case "g": {
+        if (gRef.current) {
+          gRef.current.currentTime = 0;
+          gRef.current.play();
+        }
+        break;
       }
-      if (e.key === "h") {
-        drum6.currentTime = 0;
-        drum6.play();
+      case "h": {
+        if (hRef.current) {
+          hRef.current.currentTime = 0;
+          hRef.current.play();
+        }
+        break;
       }
-      if (e.key === "j") {
-        drum7.currentTime = 0;
-        drum7.play();
+      case "j": {
+        if (jRef.current) {
+          jRef.current.currentTime = 0;
+          jRef.current.play();
+        }
+        break;
       }
-      if (e.key === "k") {
-        drum8.currentTime = 0;
-        drum8.play();
+      case "k": {
+        if (kRef.current) {
+          kRef.current.currentTime = 0;
+          kRef.current.play();
+        }
+        break;
       }
-      if (e.key === "l") {
-        drum9.currentTime = 0;
-        drum9.play();
+      case "l": {
+        if (lRef.current) {
+          lRef.current.currentTime = 0;
+          lRef.current.play();
+        }
+        break;
+      }
+      default: {
+        break;
       }
     }
-    document.addEventListener("keypress", handleKeyDown);
-  }, [drums]);
+  }
+  useEffect(() => {
+    window.addEventListener("keypress", handleKeyPress);
+    return () => {
+      window.removeEventListener("keypress", handleKeyPress);
+    };
+  }, []);
   return (
     <div className="Drums">
-      <div className="Drums-container">
-        {drums.map((drum, i) => (
-          <Drum
-            key={i}
-            keycode={keys[i]}
-            id={drum.split("/")[3].split(".")[0].toUpperCase()}
-            className={drum.split("/")[3].split(".")[0].toUpperCase()}
-            name={drum.split("/")[3].split(".")[0].toUpperCase()}
-            src={drum}
-          />
+      <div onKeyPress={handleKeyPress} className="Drums-container">
+        {_drums.map((drum, i) => (
+          <div
+            onClick={(e) => {
+              e.target.children[0].currentTime = 0;
+              e.target.children[0].play();
+            }}
+            key={drum}
+            className="drum-name"
+          >
+            {drum.split(".")[0].split("/")[3]}
+            <div className="drum-key">
+              <audio
+                ref={drumKeyPair[keys[i]]}
+                className="clip"
+                key={keys[i]}
+                src={drum}
+              ></audio>
+              <span>{keys[i]}</span>
+            </div>
+          </div>
         ))}
       </div>
     </div>
